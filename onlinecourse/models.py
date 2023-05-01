@@ -140,7 +140,7 @@ class Question(models.Model):
 
 class Choice(models.Model):
     choice_text = models.CharField(max_length=250, default='Choice Text')
-    is_correct = models.IntegerField(default=0)
+    is_correct = models.BooleanField(default=False)
     question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
 
 
