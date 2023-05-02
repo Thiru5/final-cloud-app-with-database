@@ -89,6 +89,11 @@ class CourseDetailView(generic.DetailView):
     template_name = 'onlinecourse/course_detail_bootstrap.html'
 
 
+class ExamResultView(generic.FormView):
+    model = Submission
+    template_name='onlinecourse/exam_result_bootstrap.html'
+
+
 def enroll(request, course_id):
     course = get_object_or_404(Course, pk=course_id)
     user = request.user
@@ -118,13 +123,13 @@ def submit(request, course_id):
     if is_enrolled and user.is_authenticated:
 
         enrollment_object = Enrollment.objects.get(user=user, course=course)
-        submission = Submission.objects.create(enrollment=enrollment_object.id)
+        submission = Submission.objects.create(enrollment=enrollment_object)
         choices = extract_answers(request)
         for choice in choices:
             submission.choices.add(choice)
 
 
-    return HttpResponseRedirect(reverse(viewname='onlinecourse:show_exam_result', args=(submission.id,)))
+    return HttpResponseRedirect(reverse(viewname='onlinecourse:exam_result', args=(course.id,submission.id,)))
 
 
 
