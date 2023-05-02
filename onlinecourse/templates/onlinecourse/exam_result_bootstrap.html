@@ -49,8 +49,24 @@
         <a class="btn btn-link text-danger" href="{% url 'onlinecourse:course_details' course.id %}">Re-test</a>
         {% endif %}
         <div class="card-columns-vertical mt-1">
-        <h5 class="">Exam results</h5>
-            <!--HINT Display exam results-->
+            <h5 class="">Exam results</h5>
+            {% for sub_choice in submission.choice_set.all %}
+                {% question = lesson.question_set.get(id = sub_choice.question_id) %}
+                <div class="card mt-1">
+                    <div class="card-header">
+                        <h5>{{ lesson.question_set.get(id = sub_choice.question_id) }}</h5>
+                    </div>
+                    {% csrf_token %}
+                    <div class="card-body">  
+                        {% for choice in question.choices_set.all %}               
+                            {% if choice.is_correct == True %}
+                                <h6 class="text-success">Correct Answer: {{ choice.choice_text }} <h6>
+                            {% endif %}
+                        {% endfor%}
+                        <h6>{{ sub_choice.choice_text }} <h6>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </body>
